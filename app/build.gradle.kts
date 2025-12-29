@@ -2,12 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 }
-
-repositories {
-    google()
-    mavenCentral()
-}
-
 android {
     namespace = "com.example.freester"
     compileSdk {
@@ -53,11 +47,15 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Spotify App Remote
-    implementation("com.spotify.android:app-remote:0.8.0")
-// CameraX
+    implementation(files("libs/spotify-app-remote-release-0.8.0.aar"))
+    implementation("com.google.code.gson:gson:2.10.1")
+
+
+    // CameraX
     implementation("androidx.camera:camera-camera2:1.3.0")
     implementation("androidx.camera:camera-lifecycle:1.3.0")
     implementation("androidx.camera:camera-view:1.3.0")
-// ML Kit - QR
+
+    // ML Kit - QR
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
 }
