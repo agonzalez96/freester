@@ -15,6 +15,11 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        manifestPlaceholders += mapOf(
+            "redirectSchemeName" to "freester",
+            "redirectHostName" to "callback"
+        )
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -49,6 +54,8 @@ dependencies {
     // Spotify App Remote
     implementation(files("libs/spotify-app-remote-release-0.8.0.aar"))
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.spotify.android:auth:2.1.0")
+
 
 
     // CameraX

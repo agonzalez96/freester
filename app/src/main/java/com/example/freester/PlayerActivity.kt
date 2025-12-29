@@ -47,8 +47,12 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        connectToSpotify()
+
+        if (spotifyAppRemote == null) {
+            connectToSpotify()
+        }
     }
+
 
     override fun onStop() {
         super.onStop()

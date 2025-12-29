@@ -13,13 +13,30 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
+import android.widget.Toast
+
+
+
 
 private const val TAG = "SCANNER_DEBUG"
 
 class ScannerActivity : AppCompatActivity() {
 
+    private var spotifyAppRemote: SpotifyAppRemote? = null
     private lateinit var previewView: PreviewView
     private var isProcessing = false
+
+    companion object
+    {
+        private const val CLIENT_ID = "7842d79066714c71ba12b5eaba7b6899"
+        private const val REDIRECT_URI = "freester://callback"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +54,57 @@ class ScannerActivity : AppCompatActivity() {
             )
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        connectToSpotify()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        spotifyAppRemote?.let {
+            SpotifyAppRemote.disconnect(it)
+        }
+    }
+
+    private fun connectToSpotify() {
+
+        val params = ConnectionParams.Builder(CLIENT_ID)
+            .setRedirectUri(REDIRECT_URI)
+            .showAuthView(false)
+            .build()
+
+        SpotifyAppRemote.connect(
+            this,
+            params,
+            object : Connector.ConnectionListener {
+
+                override fun onConnected(appRemote: SpotifyAppRemote) {
+                    spotifyAppRemote = appRemote
+                    Log.d("HITSTER_MODE", "Spotify conectado")
+                }
+
+                override fun onFailure(error: Throwable) {
+                    Log.e("HITSTER_MODE", "No conectado", error)
+
+                    Toast.makeText(
+                        this@ScannerActivity,
+                        "Abre Spotify y vuelve para continuar",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        )
+    }
+
+
+
+
+    override fun onResume() {
+        super.onResume()
+        isProcessing = false
+    }
+
 
     private fun hasCameraPermission(): Boolean =
         ContextCompat.checkSelfPermission(
@@ -102,20 +170,28 @@ class ScannerActivity : AppCompatActivity() {
 
                         for (barcode in barcodes) {
                             val value = barcode.rawValue
-                            Log.d(TAG, "Valor QR: $value")
+                            //Log.d(TAG, "Valor QR: $value")
 
                             if (value != null && value.contains("spotify.com") && value.contains("/track/")) {
-                                Log.d(TAG, "QR de Spotify detectado")
+                                //Log.d(TAG, "QR de Spotify detectado")
 
                                 isProcessing = true
 
                                 val trackId = extractTrackId(value)
-                                Log.d(TAG, "Track ID extraído: $trackId")
-
+                                //Log.d(TAG, "Track ID extraído: $trackId")
+                                spotifyAppRemote?.playerApi
+                                    ?.play("spotify:track:$trackId")
+                                    ?: run {
+                                        Toast.makeText(
+                                            this,
+                                            "Spotify no conectado",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                //openSpotifyTrack(trackId)
                                 val intent = Intent(this, PlayerActivity::class.java)
                                 intent.putExtra("TRACK_ID", trackId)
                                 startActivity(intent)
-                                finish()
                                 break
                             }
                         }
@@ -146,4 +222,34 @@ class ScannerActivity : AppCompatActivity() {
             .substringBefore("?")
             .substringBefore("/")
     }
+
+    private fun openSpotifyTrack(trackId: String) {
+
+        val spotifyIntent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("spotify:track:$trackId")
+            setPackage("com.spotify.music")
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        try {
+            // 1. Abrimos Spotify
+            startActivity(spotifyIntent)
+
+            // 2. Volvemos a nuestra app tras un pequeño delay
+            Handler(Looper.getMainLooper()).postDelayed({
+                moveTaskToBack(false)
+            }, 100)
+
+        } catch (e: Exception) {
+            // Fallback navegador
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://open.spotify.com/track/$trackId")
+                )
+            )
+        }
+    }
+
+
 }
