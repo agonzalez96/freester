@@ -20,6 +20,13 @@ import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import android.widget.Toast
+import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
+import android.view.View
+import android.animation.ValueAnimator
+import android.view.animation.AccelerateDecelerateInterpolator
+
+
 
 
 
@@ -41,6 +48,54 @@ class ScannerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
+
+        val border = findViewById<View>(R.id.scanBorder)
+
+        ValueAnimator.ofFloat(1f, 1.05f).apply {
+            duration = 800
+            repeatMode = ValueAnimator.REVERSE
+            repeatCount = ValueAnimator.INFINITE
+            addUpdateListener { animator ->
+                val value = animator.animatedValue as Float
+                border.scaleX = value
+                border.scaleY = value
+            }
+            start()
+        }
+
+
+        val overlay = findViewById<View>(R.id.overlay)
+        val scanWindow = findViewById<View>(R.id.scanWindow)
+
+        overlay.post {
+            val overlayBitmap = Bitmap.createBitmap(
+                overlay.width,
+                overlay.height,
+                Bitmap.Config.ARGB_8888
+            )
+
+            val canvas = Canvas(overlayBitmap)
+            canvas.drawColor(Color.parseColor("#80000000"))
+
+            val paint = Paint().apply {
+                isAntiAlias = true
+                xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+            }
+
+            val location = IntArray(2)
+            scanWindow.getLocationOnScreen(location)
+
+            val rect = RectF(
+                scanWindow.left.toFloat(),
+                scanWindow.top.toFloat(),
+                scanWindow.right.toFloat(),
+                scanWindow.bottom.toFloat()
+            )
+
+            canvas.drawRoundRect(rect, 24f, 24f, paint)
+            overlay.background = BitmapDrawable(resources, overlayBitmap)
+        }
+
 
         previewView = findViewById(R.id.previewView)
 

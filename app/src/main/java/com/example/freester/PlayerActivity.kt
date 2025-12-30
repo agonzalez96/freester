@@ -1,6 +1,5 @@
 package com.example.freester
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -8,6 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
+import android.widget.ImageButton
+import android.animation.ValueAnimator
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.View
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -19,30 +22,77 @@ class PlayerActivity : AppCompatActivity() {
     private var spotifyAppRemote: SpotifyAppRemote? = null
     private lateinit var trackId: String
     private var hasStartedPlayback = false
+    private var isPlaying = true
+
+    private lateinit var pulseAnimator: ValueAnimator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.d("PLAYER_DEBUG", "PlayerActivity onCreate")
         setContentView(R.layout.activity_player)
 
-        trackId = intent.getStringExtra("TRACK_ID") ?: run {
-            finish()
-            return
+        val btnPlayPause = findViewById<ImageButton>(R.id.btnPlayPause)
+        val btnBack5 = findViewById<ImageButton>(R.id.btnBack5)
+        val btnForward5 = findViewById<ImageButton>(R.id.btnForward5)
+        val btnRestart = findViewById<ImageButton>(R.id.btnRestart)
+        val btnScanAgain = findViewById<Button>(R.id.btnScanAgain)
+        val playCircle = findViewById<View>(R.id.playCircle)
+
+
+        // ▶️ ⏸ Play / Pause
+        btnPlayPause.setOnClickListener {
+            spotifyAppRemote?.playerApi?.let { player ->
+                if (isPlaying) {
+                    player.pause()
+                    btnPlayPause.setImageResource(R.drawable.ic_play)
+                    pulseAnimator.pause()
+                } else {
+                    player.resume()
+                    btnPlayPause.setImageResource(R.drawable.ic_pause)
+                    pulseAnimator.resume()
+                }
+                isPlaying = !isPlaying
+            }
         }
 
-        findViewById<Button>(R.id.btnPlayPause).setOnClickListener {
-            togglePlayPause()
+        // ⏪ -5 segundos
+        btnBack5.setOnClickListener {
+            spotifyAppRemote?.playerApi?.getPlayerState()?.setResultCallback { state ->
+                val newPosition = (state.playbackPosition - 5000).coerceAtLeast(0)
+                spotifyAppRemote?.playerApi?.seekTo(newPosition)
+            }
         }
 
-        findViewById<Button>(R.id.btnRestart).setOnClickListener {
+        // ⏩ +5 segundos
+        btnForward5.setOnClickListener {
+            spotifyAppRemote?.playerApi?.getPlayerState()?.setResultCallback { state ->
+                val newPosition = state.playbackPosition + 5000
+                spotifyAppRemote?.playerApi?.seekTo(newPosition)
+            }
+        }
+
+        // 🔄 Volver a empezar
+        btnRestart.setOnClickListener {
             spotifyAppRemote?.playerApi?.seekTo(0)
         }
 
-        findViewById<Button>(R.id.btnBack).setOnClickListener {
-            startActivity(Intent(this, ScannerActivity::class.java))
-            finish()
+        // 📷 Escanear otro QR
+        btnScanAgain.setOnClickListener {
+            finish() // vuelve al ScannerActivity
         }
+
+        pulseAnimator = ValueAnimator.ofFloat(1f, 1.06f).apply {
+            duration = 1400
+            repeatMode = ValueAnimator.REVERSE
+            repeatCount = ValueAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+
+            addUpdateListener { animation ->
+                val scale = animation.animatedValue as Float
+                playCircle.scaleX = scale
+                playCircle.scaleY = scale
+            }
+        }
+        pulseAnimator.start()
     }
 
     override fun onStart() {
@@ -105,6 +155,6 @@ class PlayerActivity : AppCompatActivity() {
                 } else {
                     spotifyAppRemote?.playerApi?.pause()
                 }
-            }
+        }
     }
 }

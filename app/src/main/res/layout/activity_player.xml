@@ -4,34 +4,101 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="@color/colorBackground">
 
-    <Button
-        android:id="@+id/btnPlayPause"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Play / Pause"
+    <!-- CONTENEDOR CENTRAL -->
+    <FrameLayout
+        android:id="@+id/playArea"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layoutSecondaryControls"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
 
-    <Button
-        android:id="@+id/btnRestart"
-        android:layout_width="0dp"
+        <!-- CÍRCULO (SE ANIMA) -->
+        <View
+            android:id="@+id/playCircle"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            android:background="@drawable/play_circle_outline" />
+
+        <!-- ICONO (NO SE ANIMA) -->
+        <ImageButton
+            android:id="@+id/btnPlayPause"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_pause"
+            android:tint="@color/textPrimary"
+            android:scaleType="fitCenter"
+            android:padding="32dp"
+            android:contentDescription="Play Pause"/>
+
+    </FrameLayout>
+
+
+    <!-- CONTROLES SECUNDARIOS -->
+    <LinearLayout
+        android:id="@+id/layoutSecondaryControls"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Restart"
-        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@id/btnPlayPause"
+        app:layout_constraintBottom_toTopOf="@id/btnScanAgain"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <Button
-        android:id="@+id/btnBack"
+        <!-- -5 segundos -->
+        <ImageButton
+            android:id="@+id/btnBack5"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_back_5"
+            android:background="@android:color/transparent"
+            android:tint="@color/textPrimary"/>
+
+        <!-- Restart -->
+        <ImageButton
+            android:id="@+id/btnRestart"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="24dp"
+            android:src="@drawable/ic_restart"
+            android:background="@android:color/transparent"
+            android:tint="@color/textPrimary"/>
+
+        <!-- +5 segundos -->
+        <ImageButton
+            android:id="@+id/btnForward5"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_forward_5"
+            android:background="@android:color/transparent"
+            android:tint="@color/textPrimary"/>
+
+    </LinearLayout>
+
+    <!-- BOTÓN ESCANEAR OTRO (ABAJO) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnScanAgain"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Scan another QR"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/btnRestart"
+        android:layout_height="56dp"
+        android:text="Escanear otro código"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textColor="@color/colorBackground"
+        app:cornerRadius="18dp"
+        app:backgroundTint="@color/colorPrimary"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
