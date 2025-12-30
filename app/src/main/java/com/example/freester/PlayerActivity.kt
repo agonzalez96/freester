@@ -11,7 +11,8 @@ import android.widget.ImageButton
 import android.animation.ValueAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.View
-import android.graphics.drawable.GradientDrawable
+import android.view.HapticFeedbackConstants
+
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -58,10 +59,12 @@ class PlayerActivity : AppCompatActivity() {
                 }
                 isPlaying = !isPlaying
             }
+            it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
         }
 
         // ⏪ -5 segundos
         btnBack5.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             spotifyAppRemote?.playerApi?.getPlayerState()?.setResultCallback { state ->
                 val newPosition = (state.playbackPosition - 5000).coerceAtLeast(0)
                 spotifyAppRemote?.playerApi?.seekTo(newPosition)
@@ -70,6 +73,7 @@ class PlayerActivity : AppCompatActivity() {
 
         // ⏩ +5 segundos
         btnForward5.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             spotifyAppRemote?.playerApi?.getPlayerState()?.setResultCallback { state ->
                 val newPosition = state.playbackPosition + 5000
                 spotifyAppRemote?.playerApi?.seekTo(newPosition)
@@ -78,6 +82,7 @@ class PlayerActivity : AppCompatActivity() {
 
         // 🔄 Volver a empezar
         btnRestart.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             spotifyAppRemote?.playerApi?.seekTo(0)
         }
 
@@ -175,16 +180,5 @@ class PlayerActivity : AppCompatActivity() {
                     spotifyAppRemote?.playerApi?.play(uri)
                 }
             }
-    }
-
-    private fun togglePlayPause() {
-        spotifyAppRemote?.playerApi?.playerState
-            ?.setResultCallback { state ->
-                if (state.isPaused) {
-                    spotifyAppRemote?.playerApi?.resume()
-                } else {
-                    spotifyAppRemote?.playerApi?.pause()
-                }
-        }
     }
 }
