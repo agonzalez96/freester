@@ -15,10 +15,6 @@
         android:theme="@style/Theme.FreeSter"
         android:screenOrientation="portrait">
 
-        <!-- QUITAR handler duplicado del SDK -->
-        <activity
-            android:name="com.spotify.sdk.android.auth.LoginActivity"
-            tools:node="remove" />
 
         <!-- Pantalla inicial -->
         <activity
@@ -32,23 +28,6 @@
 
         <activity
             android:name=".ScannerActivity"
-            android:exported="false" />
-
-        <!-- Redirect OAuth -->
-        <activity
-            android:name=".SpotifyAuthActivity"
-            android:exported="true"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="freester"/>
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ConnectActivity"
             android:exported="false" />
 
         <activity

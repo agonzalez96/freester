@@ -49,8 +49,7 @@ class IntroActivity : AppCompatActivity() {
             .setDuration(500)
             .setStartDelay(500)
             .start()
-
-
+        
         logo.scaleX = 0f
         logo.scaleY = 0f
         logo.animate()
