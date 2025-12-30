@@ -23,13 +23,8 @@ import android.widget.Toast
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.view.View
-import android.animation.ValueAnimator
-import android.view.animation.AccelerateDecelerateInterpolator
-
-
-
-
-
+import android.animation.ObjectAnimator
+import android.view.animation.LinearInterpolator
 
 private const val TAG = "SCANNER_DEBUG"
 
@@ -49,20 +44,33 @@ class ScannerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
 
-        val border = findViewById<View>(R.id.scanBorder)
+        val scanLine = findViewById<View>(R.id.scanLine)
 
-        ValueAnimator.ofFloat(1f, 1.05f).apply {
-            duration = 800
-            repeatMode = ValueAnimator.REVERSE
-            repeatCount = ValueAnimator.INFINITE
-            addUpdateListener { animator ->
-                val value = animator.animatedValue as Float
-                border.scaleX = value
-                border.scaleY = value
+        scanLine.post {
+            val frameSize = 260f
+            val half = frameSize / 2
+
+            val scanLine = findViewById<View>(R.id.scanLine)
+
+            scanLine.post {
+                val frameSize = 700f
+                val half = frameSize / 2
+
+                val animator = ObjectAnimator.ofFloat(
+                    scanLine,
+                    "translationX",
+                    -half,
+                    half
+                ).apply {
+                    duration = 3000L
+                    repeatCount = ObjectAnimator.INFINITE
+                    repeatMode = ObjectAnimator.REVERSE
+                    interpolator = android.view.animation.AccelerateDecelerateInterpolator()
+                }
+
+                animator.start()
             }
-            start()
         }
-
 
         val overlay = findViewById<View>(R.id.overlay)
         val scanWindow = findViewById<View>(R.id.scanWindow)

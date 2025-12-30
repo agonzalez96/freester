@@ -4,28 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Cámara -->
+    <!-- CÁMARA (SOLO ZONA CENTRAL) -->
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_gravity="center" />
 
-    <!-- Overlay oscuro -->
+    <!-- OVERLAY OSCURO (TAPA TODO) -->
     <View
         android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#80000000" />
 
-    <!-- Ventana transparente -->
+    <!-- VENTANA TRANSPARENTE (AGUJERO VISUAL) -->
     <View
         android:id="@+id/scanWindow"
         android:layout_width="260dp"
         android:layout_height="260dp"
-        android:background="@android:color/transparent"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:background="@drawable/transparent_cutout" />
 
-    <!-- Marco QR -->
+    <!-- MARCO QR -->
     <View
         android:id="@+id/scanBorder"
         android:layout_width="260dp"
@@ -33,27 +34,37 @@
         android:layout_gravity="center"
         android:background="@drawable/qr_border" />
 
-    <!-- Texto superior -->
+    <!-- TEXTO SUPERIOR -->
     <TextView
         android:id="@+id/tvScanTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Escanea una canción"
-        android:textColor="@color/textPrimary"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_gravity="top|center_horizontal"
         android:layout_marginTop="48dp" />
 
-    <!-- Texto inferior -->
+    <!-- TEXTO INFERIOR -->
     <TextView
         android:id="@+id/tvScanHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Apunta al código QR"
-        android:textColor="@color/textSecondary"
+        android:text="Apunta el QR dentro del recuadro"
+        android:textColor="#CCFFFFFF"
         android:textSize="14sp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="48dp" />
+
+    <!-- LÍNEA DE ESCANEO -->
+    <View
+        android:id="@+id/scanLine"
+        android:layout_width="3dp"
+        android:layout_height="253dp"
+        android:layout_gravity="center"
+        android:background="@drawable/scan_line"/>
+
+
 
 </FrameLayout>

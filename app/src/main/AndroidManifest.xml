@@ -12,9 +12,10 @@
         android:label="FreeSter"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FreeSter">
+        android:theme="@style/Theme.FreeSter"
+        android:screenOrientation="portrait">
 
-        <!-- 🔴 QUITAR handler duplicado del SDK -->
+        <!-- QUITAR handler duplicado del SDK -->
         <activity
             android:name="com.spotify.sdk.android.auth.LoginActivity"
             tools:node="remove" />
