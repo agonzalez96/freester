@@ -35,7 +35,7 @@
             android:layout_height="220dp"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_pause"
+            android:src="@drawable/ic_pause_filled"
             android:tint="@color/textPrimary"
             android:scaleType="fitCenter"
             android:padding="32dp"

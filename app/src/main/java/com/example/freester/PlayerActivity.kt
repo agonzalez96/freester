@@ -43,11 +43,11 @@ class PlayerActivity : AppCompatActivity() {
             spotifyAppRemote?.playerApi?.let { player ->
                 if (isPlaying) {
                     player.pause()
-                    btnPlayPause.setImageResource(R.drawable.ic_play)
+                    btnPlayPause.setImageResource(R.drawable.ic_play_filled)
                     pulseAnimator.pause()
                 } else {
                     player.resume()
-                    btnPlayPause.setImageResource(R.drawable.ic_pause)
+                    btnPlayPause.setImageResource(R.drawable.ic_pause_filled)
                     pulseAnimator.resume()
                 }
                 isPlaying = !isPlaying
