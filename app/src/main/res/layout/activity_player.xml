@@ -1,105 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="24dp"
-    android:background="@color/colorBackground">
+    android:layout_height="match_parent">
 
-    <!-- CONTENEDOR CENTRAL -->
-    <FrameLayout
-        android:id="@+id/playArea"
-        android:layout_width="260dp"
-        android:layout_height="260dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/layoutSecondaryControls"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_chainStyle="packed">
+    <!-- FONDO ANIMADO -->
+    <com.example.freester.AnimatedGradientView
+        android:id="@+id/animatedBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-        <!-- CÍRCULO (SE ANIMA) -->
-        <View
-            android:id="@+id/playCircle"
-            android:layout_width="220dp"
-            android:layout_height="220dp"
-            android:layout_gravity="center"
-            android:background="@drawable/play_circle_outline" />
+    <!-- CONTENIDO DE LA PANTALLA -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
 
-        <!-- ICONO (NO SE ANIMA) -->
-        <ImageButton
-            android:id="@+id/btnPlayPause"
-            android:layout_width="220dp"
-            android:layout_height="220dp"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_pause_filled"
-            android:tint="@color/textPrimary"
-            android:scaleType="fitCenter"
-            android:padding="32dp"
-            android:contentDescription="Play Pause"/>
+        <!-- CONTENEDOR CENTRAL -->
+        <FrameLayout
+            android:id="@+id/playArea"
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/layoutSecondaryControls"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed">
 
-    </FrameLayout>
+            <!-- CÍRCULO (SE ANIMA) -->
+            <View
+                android:id="@+id/playCircle"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_gravity="center"
+                android:background="@drawable/play_circle_outline" />
+
+            <!-- ICONO (NO SE ANIMA) -->
+            <ImageButton
+                android:id="@+id/btnPlayPause"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_pause_filled"
+                android:tint="@color/textPrimary"
+                android:scaleType="fitCenter"
+                android:padding="32dp"
+                android:contentDescription="Play Pause"/>
+
+        </FrameLayout>
 
 
-    <!-- CONTROLES SECUNDARIOS -->
-    <LinearLayout
-        android:id="@+id/layoutSecondaryControls"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/btnPlayPause"
-        app:layout_constraintBottom_toTopOf="@id/btnScanAgain"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        <!-- CONTROLES SECUNDARIOS -->
+        <LinearLayout
+            android:id="@+id/layoutSecondaryControls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/btnPlayPause"
+            app:layout_constraintBottom_toTopOf="@id/btnScanAgain"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- -5 segundos -->
-        <ImageButton
-            android:id="@+id/btnBack5"
-            android:layout_width="56dp"
+            <!-- -5 segundos -->
+            <ImageButton
+                android:id="@+id/btnBack5"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/ic_back_5"
+                android:background="@android:color/transparent"
+                android:tint="@color/textPrimary"/>
+
+            <!-- Restart -->
+            <ImageButton
+                android:id="@+id/btnRestart"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="24dp"
+                android:src="@drawable/ic_restart"
+                android:background="@android:color/transparent"
+                android:tint="@color/textPrimary"/>
+
+            <!-- +5 segundos -->
+            <ImageButton
+                android:id="@+id/btnForward5"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/ic_forward_5"
+                android:background="@android:color/transparent"
+                android:tint="@color/textPrimary"/>
+
+        </LinearLayout>
+
+        <!-- BOTÓN ESCANEAR OTRO (ABAJO) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnScanAgain"
+            android:layout_width="0dp"
             android:layout_height="56dp"
-            android:src="@drawable/ic_back_5"
-            android:background="@android:color/transparent"
-            android:tint="@color/textPrimary"/>
+            android:text="Escanear otro código"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="@color/colorBackground"
+            app:cornerRadius="18dp"
+            app:backgroundTint="@color/colorPrimary"
+            android:layout_marginTop="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <!-- Restart -->
-        <ImageButton
-            android:id="@+id/btnRestart"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginHorizontal="24dp"
-            android:src="@drawable/ic_restart"
-            android:background="@android:color/transparent"
-            android:tint="@color/textPrimary"/>
 
-        <!-- +5 segundos -->
-        <ImageButton
-            android:id="@+id/btnForward5"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/ic_forward_5"
-            android:background="@android:color/transparent"
-            android:tint="@color/textPrimary"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
-
-    <!-- BOTÓN ESCANEAR OTRO (ABAJO) -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnScanAgain"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:text="Escanear otro código"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:textColor="@color/colorBackground"
-        app:cornerRadius="18dp"
-        app:backgroundTint="@color/colorPrimary"
-        android:layout_marginTop="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

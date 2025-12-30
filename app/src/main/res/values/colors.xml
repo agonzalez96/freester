@@ -17,4 +17,14 @@
     <color name="textPrimary">#FFFFFF</color>
     <color name="textSecondary">#B0BEC5</color>
 
+    <!-- SET A -->
+    <color name="bg_start_1">#00CFC1</color> <!-- turquesa vivo -->
+    <color name="bg_end_1">#0B132B</color>   <!-- azul casi negro -->
+
+    <!-- SET B -->
+    <color name="bg_start_2">#5EFCE8</color> <!-- menta clara -->
+    <color name="bg_end_2">#3A0CA3</color>   <!-- morado intenso -->
+
+
+
 </resources>

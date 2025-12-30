@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.animation.ValueAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.View
+import android.graphics.drawable.GradientDrawable
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -25,6 +26,8 @@ class PlayerActivity : AppCompatActivity() {
     private var isPlaying = true
 
     private lateinit var pulseAnimator: ValueAnimator
+    private var backgroundAnimator: ValueAnimator? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +39,9 @@ class PlayerActivity : AppCompatActivity() {
         val btnRestart = findViewById<ImageButton>(R.id.btnRestart)
         val btnScanAgain = findViewById<Button>(R.id.btnScanAgain)
         val playCircle = findViewById<View>(R.id.playCircle)
+
+        val animatedBackground =
+            findViewById<AnimatedGradientView>(R.id.animatedBackground)
 
 
         // ▶️ ⏸ Play / Pause
@@ -80,6 +86,7 @@ class PlayerActivity : AppCompatActivity() {
             finish() // vuelve al ScannerActivity
         }
 
+        //Animacion Boton central
         pulseAnimator = ValueAnimator.ofFloat(1f, 1.06f).apply {
             duration = 1400
             repeatMode = ValueAnimator.REVERSE
@@ -93,6 +100,19 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
         pulseAnimator.start()
+
+        //Animacion fondo
+        val backgroundAnimator = ValueAnimator.ofFloat(0f, 360f).apply {
+            duration = 20000L // 20 segundos por vuelta (calmo y elegante)
+            repeatCount = ValueAnimator.INFINITE
+            interpolator = android.view.animation.LinearInterpolator()
+
+            addUpdateListener { animator ->
+                val angle = animator.animatedValue as Float
+                animatedBackground.setAngle(angle)
+            }
+        }
+        backgroundAnimator.start()
     }
 
     override fun onStart() {
@@ -109,6 +129,16 @@ class PlayerActivity : AppCompatActivity() {
         spotifyAppRemote?.let {
             SpotifyAppRemote.disconnect(it)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        backgroundAnimator?.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        backgroundAnimator?.pause()
     }
 
     private fun connectToSpotify() {
