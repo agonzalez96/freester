@@ -15,7 +15,6 @@
         android:theme="@style/Theme.FreeSter"
         android:screenOrientation="portrait">
 
-
         <!-- Pantalla inicial -->
         <activity
             android:name=".IntroActivity"

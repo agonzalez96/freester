@@ -285,34 +285,4 @@ class ScannerActivity : AppCompatActivity() {
             .substringBefore("?")
             .substringBefore("/")
     }
-
-    private fun openSpotifyTrack(trackId: String) {
-
-        val spotifyIntent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("spotify:track:$trackId")
-            setPackage("com.spotify.music")
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-
-        try {
-            // 1. Abrimos Spotify
-            startActivity(spotifyIntent)
-
-            // 2. Volvemos a nuestra app tras un pequeño delay
-            Handler(Looper.getMainLooper()).postDelayed({
-                moveTaskToBack(false)
-            }, 100)
-
-        } catch (e: Exception) {
-            // Fallback navegador
-            startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://open.spotify.com/track/$trackId")
-                )
-            )
-        }
-    }
-
-
 }
